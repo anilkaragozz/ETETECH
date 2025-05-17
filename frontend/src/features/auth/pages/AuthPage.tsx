@@ -1,0 +1,34 @@
+import { Card, Tabs } from "antd";
+import { useState } from "react";
+import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
+
+const AuthPage = () => {
+  const [activeKey, setActiveKey] = useState("login");
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <Card className="w-[850px] max-w-3xl flex flex-col justify-center shadow-lg rounded-lg">
+        <Tabs
+          centered
+          activeKey={activeKey}
+          onChange={setActiveKey}
+          items={[
+            {
+              key: "login",
+              label: "Giriş Yap",
+              children: <LoginForm />,
+            },
+            {
+              key: "register",
+              label: "Kayıt Ol",
+              children: <RegisterForm />,
+            },
+          ]}
+        />
+      </Card>
+    </div>
+  );
+};
+
+export default AuthPage;
