@@ -1,6 +1,6 @@
 import { Table, Button, Space } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import type { Product } from "../pages/ProductPage";
+import type { Product } from "@/types";
 
 type Props = {
   products: Product[];
@@ -15,20 +15,24 @@ const ProductTable = ({ products, onDelete, onEdit }: Props) => {
       dataIndex: "name",
     },
     {
-      title: "SKU",
-      dataIndex: "sku",
+      title: "Category",
+      dataIndex: "category",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      render: (price: number) => `$${price.toFixed(2)}`,
+      title: "Amount",
+      dataIndex: "amount",
     },
     {
-      title: "Stock",
-      dataIndex: "stock",
+      title: "Unit",
+      dataIndex: "unit",
     },
     {
-      title: "İşlemler",
+      title: "Company Name",
+      dataIndex: ["companyId", "name"], // nested path
+      render: (text: string) => text || "-",
+    },
+    {
+      title: "Actions",
       render: (record: Product) => (
         <Space>
           <Button
@@ -51,8 +55,9 @@ const ProductTable = ({ products, onDelete, onEdit }: Props) => {
     <Table
       columns={columns}
       dataSource={products}
-      rowKey="id"
-      pagination={false}
+      rowKey={"_id"}
+      pagination={{ pageSize: 10 }}
+      scroll={{ x: 800 }}
     />
   );
 };

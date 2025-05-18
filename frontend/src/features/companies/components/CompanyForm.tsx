@@ -1,6 +1,7 @@
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button, Select } from "antd";
 import { useEffect } from "react";
 import type { Company } from "@/types";
+import countries from "@/data/countries.json";
 
 type Props = {
   open: boolean;
@@ -9,7 +10,7 @@ type Props = {
   initialValues?: Company | null;
 };
 
-const CompanyFormModal = ({ open, onCancel, onSave, initialValues }: Props) => {
+const CompanyForm = ({ open, onCancel, onSave, initialValues }: Props) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -20,9 +21,9 @@ const CompanyFormModal = ({ open, onCancel, onSave, initialValues }: Props) => {
     }
   }, [initialValues, form]);
 
-  const onFinish = (values: Omit<Company, "id">) => {
+  const onFinish = (values: Omit<Company, "_id">) => {
     const company: Company = {
-      id: initialValues?.id || crypto.randomUUID(),
+      ...initialValues,
       ...values,
     };
     onSave(company);
@@ -31,7 +32,7 @@ const CompanyFormModal = ({ open, onCancel, onSave, initialValues }: Props) => {
 
   return (
     <Modal
-      title={initialValues ? "Şirketi Düzenle" : "Yeni Şirket Ekle"}
+      title={initialValues ? "Edit Company" : "Add Company"}
       open={open}
       onCancel={() => {
         form.resetFields();
@@ -47,46 +48,61 @@ const CompanyFormModal = ({ open, onCancel, onSave, initialValues }: Props) => {
         className="space-y-6"
       >
         <Form.Item
-          label="Şirket Adı"
+          label="Company Name"
           name="name"
-          rules={[{ required: true, message: "Şirket adı gereklidir" }]}
+          rules={[{ required: true, message: "Company Name is required!" }]}
         >
-          <Input placeholder="Şirket adı" />
+          <Input placeholder="Company Name" />
         </Form.Item>
 
         <Form.Item
-          label="Vergi Numarası"
+          label="Legal Number"
           name="legalNumber"
-          rules={[{ required: true, message: "Vergi numarası gereklidir" }]}
+          rules={[{ required: true, message: "Legal Number is required!" }]}
         >
-          <Input placeholder="Vergi numarası" />
+          <Input placeholder="Legal Number" />
         </Form.Item>
 
         <Form.Item
-          label="Ülke"
-          name="country"
-          rules={[{ required: true, message: "Ülke gereklidir" }]}
+          label="Country"
+          name="incorporationCountry"
+          rules={[{ required: true, message: "Country is required!" }]}
         >
-          <Input placeholder="Ülke" />
+          <Select
+            showSearch
+            placeholder="Choose a country"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.children as unknown as string)
+                .toLowerCase()
+                .includes(input.toLowerCase())
+            }
+          >
+            {countries.map((country) => (
+              <Select.Option key={country.code} value={country.name}>
+                {country.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
           label="Website"
           name="website"
           rules={[
-            { required: true, message: "Website gereklidir" },
-            { type: "url", message: "Geçerli bir URL girin" },
+            { required: true, message: "Website is required!" },
+            { type: "url", message: "Please enter valid URL" },
           ]}
         >
           <Input placeholder="https://example.com" />
         </Form.Item>
 
         <Form.Item className="text-right">
-          <Button onClick={onCancel} className="mr-2">
-            Vazgeç
+          <Button onClick={onCancel} className="mr-4">
+            Cancel
           </Button>
           <Button type="primary" htmlType="submit">
-            {initialValues ? "Güncelle" : "Kaydet"}
+            {initialValues ? "Edit" : "Save"}
           </Button>
         </Form.Item>
       </Form>
@@ -94,4 +110,4 @@ const CompanyFormModal = ({ open, onCancel, onSave, initialValues }: Props) => {
   );
 };
 
-export default CompanyFormModal;
+export default CompanyForm;

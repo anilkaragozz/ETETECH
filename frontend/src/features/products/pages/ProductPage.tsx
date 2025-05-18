@@ -1,20 +1,23 @@
 import { useState } from "react";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import ProductTable from "../components/ProductTable";
 import ProductForm from "../components/ProductForm";
-
-export type Product = {
-  id: string;
-  name: string;
-  sku: string;
-  price: number;
-  stock: number;
-};
+import type { Product } from "@/types";
+import {
+  useGetProducts,
+  useCreateProduct,
+  useUpdateProduct,
+  useDeleteProduct,
+} from "@/services/mutations/useProduct";
 
 const ProductPage = () => {
-  const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  const { data: products, isLoading } = useGetProducts();
+  const createProduct = useCreateProduct();
+  const updateProduct = useUpdateProduct();
+  const deleteProduct = useDeleteProduct();
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
@@ -22,16 +25,16 @@ const ProductPage = () => {
   };
 
   const handleDelete = (product: Product) => {
-    setProducts((prev) => prev.filter((p) => p.id !== product.id));
+    if (product._id) {
+      deleteProduct.mutate(product._id);
+    }
   };
 
   const handleSave = (product: Product) => {
-    if (editingProduct) {
-      setProducts((prev) =>
-        prev.map((p) => (p.id === product.id ? product : p))
-      );
+    if (editingProduct && product._id) {
+      updateProduct.mutate(product);
     } else {
-      setProducts((prev) => [...prev, product]);
+      createProduct.mutate(product);
     }
     setEditingProduct(null);
     setIsModalOpen(false);
@@ -41,15 +44,21 @@ const ProductPage = () => {
     <div className="p-6">
       <div className="flex justify-end mb-4">
         <Button type="primary" onClick={() => setIsModalOpen(true)}>
-          Yeni Ürün Ekle
+          Add Product
         </Button>
       </div>
 
-      <ProductTable
-        products={products}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-      />
+      {isLoading ? (
+        <div className="flex justify-center">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <ProductTable
+          products={products || []}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
+      )}
 
       <ProductForm
         open={isModalOpen}

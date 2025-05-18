@@ -1,26 +1,30 @@
-import { Form, Input, Button, message } from "antd";
-import axiosClient from "@/libs/axios";
+import { Form, Input, Button, Row, Col, message } from "antd";
+import { useRegister } from "@/services/mutations/useRegister";
 import { useNavigate } from "react-router-dom";
+import type { RegisterData } from "@/types";
+import { AxiosError } from "axios";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
 
-  const onFinish = async (values: {
-    name: string;
-    surname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => {
-    console.log("Form values:", values);
-    try {
-      await axiosClient.post("/auth/register", values);
-      message.success("Kayıt başarılı, şimdi giriş yapabilirsiniz.");
-      navigate("/login");
-    } catch (error) {
-      console.error("Kayıt başarısız", error);
-      message.error("Kayıt başarısız.");
-    }
+  const registerMutation = useRegister();
+
+  const onFinish = async (values: RegisterData) => {
+    console.log(values);
+    registerMutation.mutate(values, {
+      onSuccess: () => {
+        message.success("Registration successful. You can now login.");
+        navigate("/auth");
+      },
+      onError: (error: unknown) => {
+        if (error instanceof AxiosError) {
+          const msg = error.response?.data?.message || "Login failed.";
+          message.error(msg);
+        } else {
+          message.error("An unexpected error occurred.");
+        }
+      },
+    });
   };
 
   return (
@@ -28,70 +32,85 @@ const RegisterForm = () => {
       layout="vertical"
       onFinish={onFinish}
       autoComplete="off"
-      className="space-y-6"
+      className="space-y-6 min-h-[300px]"
     >
-      <Form.Item
-        label="Ad"
-        name="name"
-        rules={[{ required: true, message: "İsim zorunludur" }]}
-      >
-        <Input placeholder="Adınız" />
-      </Form.Item>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              { required: true, message: "Name is required!" },
+              { min: 2, message: "Name must be at least 2 characters!" },
+            ]}
+          >
+            <Input placeholder="Name" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label="Surname"
+            name="surname"
+            rules={[
+              { required: true, message: "Surname is required!" },
+              { min: 2, message: "Surname must be at least 2 characters!" },
+            ]}
+          >
+            <Input placeholder="Surname" />
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Form.Item
-        label="Soyad"
-        name="surname"
-        rules={[{ required: true, message: "Soyad zorunludur" }]}
-      >
-        <Input placeholder="Soyadınız" />
-      </Form.Item>
-
-      <Form.Item
-        label="E-posta"
+        label="E-mail"
         name="email"
         rules={[
-          { required: true, message: "E-posta zorunludur" },
-          { type: "email", message: "Geçerli bir e-posta girin" },
+          { required: true, message: "E-mail is required!" },
+          { type: "email", message: "Please enter a valid e-mail!" },
         ]}
       >
-        <Input placeholder="ornek@site.com" />
+        <Input placeholder="example@site.com" />
       </Form.Item>
 
-      <Form.Item
-        label="Şifre"
-        name="password"
-        rules={[
-          { required: true, message: "Şifre zorunludur" },
-          { min: 6, message: "Şifre en az 6 karakter olmalı" },
-        ]}
-        hasFeedback
-      >
-        <Input.Password placeholder="••••••" />
-      </Form.Item>
-
-      <Form.Item
-        label="Şifreyi Onayla"
-        name="confirmPassword"
-        dependencies={["password"]}
-        hasFeedback
-        rules={[
-          { required: true, message: "Lütfen şifrenizi tekrar girin" },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue("password") === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error("Şifreler eşleşmiyor"));
-            },
-          }),
-        ]}
-      >
-        <Input.Password placeholder="••••••" />
-      </Form.Item>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              { required: true, message: "Password is required!" },
+              { min: 6, message: "Password must be at least 6 characters!" },
+            ]}
+          >
+            <Input.Password placeholder="••••••" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label="Confirm Password"
+            name="confirmPassword"
+            dependencies={["password"]}
+            hasFeedback
+            rules={[
+              { required: true, message: "Please enter your password again" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Password mismatch"));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="••••••" />
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Form.Item>
         <Button type="primary" htmlType="submit" block>
-          Kayıt Ol
+          Sign Up
         </Button>
       </Form.Item>
     </Form>

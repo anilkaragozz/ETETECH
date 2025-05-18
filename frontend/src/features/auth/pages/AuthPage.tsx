@@ -16,12 +16,12 @@ const AuthPage = () => {
           items={[
             {
               key: "login",
-              label: "Giriş Yap",
+              label: "Sign In",
               children: <LoginForm />,
             },
             {
               key: "register",
-              label: "Kayıt Ol",
+              label: "Sign Up",
               children: <RegisterForm />,
             },
           ]}

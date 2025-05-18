@@ -20,7 +20,7 @@ const CompanyTable = ({ companies, onDelete, onEdit }: Props) => {
     },
     {
       title: "Incorporation Country",
-      dataIndex: "country",
+      dataIndex: "incorporationCountry",
     },
     {
       title: "Website",
@@ -32,7 +32,7 @@ const CompanyTable = ({ companies, onDelete, onEdit }: Props) => {
       ),
     },
     {
-      title: "İşlemler",
+      title: "Actions",
       render: (record: Company) => (
         <Space>
           <Button
@@ -56,7 +56,8 @@ const CompanyTable = ({ companies, onDelete, onEdit }: Props) => {
       columns={columns}
       dataSource={companies}
       rowKey="id"
-      pagination={false}
+      pagination={{ pageSize: 10 }}
+      scroll={{ x: 800 }}
     />
   );
 };
