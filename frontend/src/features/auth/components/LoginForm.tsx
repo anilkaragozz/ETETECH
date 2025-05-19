@@ -1,9 +1,10 @@
 import { Form, Input, Button, message } from "antd";
-import { useLogin } from "@/services/mutations/useLogin";
-import { useAuthStore } from "@/store/auth";
 import { useNavigate } from "react-router-dom";
-import type { LoginRequest } from "@/types";
 import { AxiosError } from "axios";
+
+import { useAuthStore } from "@/store/auth";
+import type { LoginRequest } from "@/types";
+import { useLogin } from "@/services/mutations/useLogin";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -13,8 +14,8 @@ const LoginForm = () => {
 
   const onFinish = async (values: LoginRequest) => {
     loginMutation.mutate(values, {
-      onSuccess: (data) => {
-        const token = data.accessToken;
+      onSuccess: (res) => {
+        const token = res.accessToken;
         localStorage.setItem("accessToken", token);
         setAccessToken(token);
         navigate("/dashboard");

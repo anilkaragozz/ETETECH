@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button, Spin } from "antd";
-import CompanyTable from "../components/CompanyTable";
-import CompanyForm from "../components/CompanyForm";
+
+import CompanyTable from "@/features/companies/components/CompanyTable";
+import CompanyForm from "@/features/companies/components/CompanyForm";
 import type { Company } from "@/types";
 import {
   useGetCompanies,

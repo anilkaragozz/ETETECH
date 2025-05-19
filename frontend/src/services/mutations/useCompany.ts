@@ -2,7 +2,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/libs/axios";
 import type { Company } from "@/types";
 
-// 🚀 GET - Get all companies
 export const useGetCompanies = () => {
   return useQuery<Company[]>({
     queryKey: ["companies"],
@@ -13,7 +12,6 @@ export const useGetCompanies = () => {
   });
 };
 
-// ➕ POST - Create new company
 export const useCreateCompany = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -27,7 +25,6 @@ export const useCreateCompany = () => {
   });
 };
 
-// ✏️ PUT - Update company
 export const useUpdateCompany = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -41,7 +38,6 @@ export const useUpdateCompany = () => {
   });
 };
 
-// ❌ DELETE - Delete company
 export const useDeleteCompany = () => {
   const queryClient = useQueryClient();
   return useMutation({

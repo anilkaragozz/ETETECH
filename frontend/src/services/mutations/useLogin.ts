@@ -4,6 +4,6 @@ import type { LoginRequest, LoginResponse } from "@/types";
 
 export const useLogin = () =>
   useMutation<LoginResponse, unknown, LoginRequest>({
-    mutationFn: (data: LoginRequest) =>
-      axiosClient.post("/auth/login", data).then((res) => res.data),
+    mutationFn: (req: LoginRequest) =>
+      axiosClient.post("/auth/login", req).then((res) => res.data),
   });

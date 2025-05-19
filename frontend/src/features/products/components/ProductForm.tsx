@@ -49,30 +49,6 @@ const ProductForm = ({ open, onCancel, onSave, initialValues }: Props) => {
         className="space-y-6"
       >
         <Form.Item
-          label="Company"
-          name="companyId"
-          rules={[{ required: true, message: "Company is required!" }]}
-        >
-          <Select
-            placeholder="Select a company"
-            loading={loadingCompanies}
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              (option?.children as unknown as string)
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-          >
-            {companies?.map((company) => (
-              <Select.Option key={company._id} value={company._id}>
-                {company.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item
           label="Product Name"
           name="name"
           rules={[{ required: true, message: "Product name is required!" }]}
@@ -107,6 +83,30 @@ const ProductForm = ({ open, onCancel, onSave, initialValues }: Props) => {
           rules={[{ required: true, message: "Unit is required!" }]}
         >
           <InputNumber min={0} step={1} className="w-full" placeholder="Unit" />
+        </Form.Item>
+
+        <Form.Item
+          label="Company"
+          name="companyId"
+          rules={[{ required: true, message: "Company is required!" }]}
+        >
+          <Select
+            placeholder="Select a company"
+            loading={loadingCompanies}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.children as unknown as string)
+                .toLowerCase()
+                .includes(input.toLowerCase())
+            }
+          >
+            {companies?.map((company) => (
+              <Select.Option key={company._id} value={company._id}>
+                {company.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item className="text-right">

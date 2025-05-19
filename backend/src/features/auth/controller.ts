@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "./model";
 
-// POST /api/auth/register
+
 export const register: RequestHandler = async (req, res) => {
   const { name, surname, email, password, confirmPassword } = req.body;
 
@@ -32,19 +32,19 @@ export const register: RequestHandler = async (req, res) => {
   res.status(201).json({ message: "User registered successfully." });
 };
 
-// POST /api/auth/login
+
 export const login: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
   if (!user) {
-    res.status(401).json({ message: "Invalid email or password." });
+    res.status(401).json({ message: "Invalid email address." });
     return;
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    res.status(401).json({ message: "Invalid email or password." });
+    res.status(401).json({ message: "Invalid password." });
     return;
   }
 
@@ -53,9 +53,4 @@ export const login: RequestHandler = async (req, res) => {
   });
 
   res.json({ accessToken: token, message: "Login successful." });
-};
-
-// POST /api/auth/logout
-export const logout: RequestHandler = async (_req, res) => {
-  res.json({ message: "Logged out successfully." });
 };

@@ -1,6 +1,7 @@
 import { Layout, Menu, Button } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LogoutOutlined } from "@ant-design/icons";
+
 import { useAuthStore } from "@/store/auth";
 
 const { Header, Content } = Layout;
@@ -13,7 +14,7 @@ const AppLayout = () => {
   const handleLogout = () => {
     logout();
     localStorage.removeItem("accessToken");
-    navigate("/login");
+    navigate("/auth");
   };
 
   return (

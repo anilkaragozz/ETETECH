@@ -1,4 +1,3 @@
-// src/services/mutations/useRegister.ts
 import { useMutation } from "@tanstack/react-query";
 import axiosClient from "@/libs/axios";
 import type { RegisterData } from "@/types";

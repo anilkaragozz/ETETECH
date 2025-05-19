@@ -2,16 +2,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/libs/axios";
 import type { Product } from "@/types";
 
-export const useGetProducts = () => {
-  return useQuery<Product[]>({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const res = await axiosClient.get("/products");
-      return res.data;
-    },
-  });
-};
-
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -21,6 +11,16 @@ export const useCreateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+};
+
+export const useGetProducts = () => {
+  return useQuery<Product[]>({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await axiosClient.get("/products");
+      return res.data;
     },
   });
 };

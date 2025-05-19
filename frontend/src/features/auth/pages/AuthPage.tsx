@@ -1,7 +1,8 @@
 import { Card, Tabs } from "antd";
 import { useState } from "react";
-import LoginForm from "../components/LoginForm";
-import RegisterForm from "../components/RegisterForm";
+
+import LoginForm from "@/features/auth/components/LoginForm";
+import RegisterForm from "@/features/auth/components/RegisterForm";
 
 const AuthPage = () => {
   const [activeKey, setActiveKey] = useState("login");

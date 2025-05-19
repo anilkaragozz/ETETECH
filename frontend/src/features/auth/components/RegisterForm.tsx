@@ -1,8 +1,9 @@
 import { Form, Input, Button, Row, Col, message } from "antd";
-import { useRegister } from "@/services/mutations/useRegister";
 import { useNavigate } from "react-router-dom";
-import type { RegisterData } from "@/types";
 import { AxiosError } from "axios";
+
+import type { RegisterData } from "@/types";
+import { useRegister } from "@/services/mutations/useRegister";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ const RegisterForm = () => {
   const registerMutation = useRegister();
 
   const onFinish = async (values: RegisterData) => {
-    console.log(values);
     registerMutation.mutate(values, {
       onSuccess: () => {
         message.success("Registration successful. You can now login.");
