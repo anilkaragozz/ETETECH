@@ -28,7 +28,7 @@ const ProductTable = ({ products, onDelete, onEdit }: Props) => {
     },
     {
       title: "Company Name",
-      dataIndex: ["companyId", "name"], // nested path
+      dataIndex: ["companyId", "name"],
       render: (text: string) => text || "-",
     },
     {

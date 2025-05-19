@@ -62,6 +62,7 @@ const DashboardPage = () => {
               Companies by Country
             </Typography.Title>
             <List
+              style={{ maxHeight: 300, overflowY: "auto" }}
               dataSource={Object.entries(byCountry)}
               renderItem={([country, count]) => (
                 <List.Item className="flex justify-between">

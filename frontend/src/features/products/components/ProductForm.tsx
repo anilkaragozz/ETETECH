@@ -82,7 +82,7 @@ const ProductForm = ({ open, onCancel, onSave, initialValues }: Props) => {
           name="unit"
           rules={[{ required: true, message: "Unit is required!" }]}
         >
-          <InputNumber min={0} step={1} className="w-full" placeholder="Unit" />
+          <Input placeholder="Unit" />
         </Form.Item>
 
         <Form.Item
